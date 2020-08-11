@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: example
+  name: example
+  namespace: example
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      containers:
+      - name: example
+        image: simple_sinatra_app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4567
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /healthy
+            port: 4567
+          initialDelaySeconds: 2
+          periodSeconds: 2
+          failureThreshold: 1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
