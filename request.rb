@@ -11,7 +11,7 @@ loop do
 
   threads = []
   result = Queue.new
-  # simulate 3 concurrent users request to our service
+  # simulate 5 concurrent users request to our service
   (1..5).each do |i|
     threads << Thread.new do
       begin
